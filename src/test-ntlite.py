@@ -78,7 +78,12 @@ commit;
         rows = db.gets("select name from users where age < ? order by name asc;", (8,))
         self.assertEqual('A', rows[0].name)
         self.assertEqual('C', rows[1].name)
- 
+    def test_name_lower_case(self):
+        db = NtLite()
+        db.exec("create table users(id integer, name text, age integer);")
+        db.execm("insert into users values(?,?,?);", [(0,'A',7),(1,'B',8)])
+        self.assertEqual('A', db.get("select NAME from users where id=?;", (0,)).name)
+
 
 if __name__ == '__main__':
     unittest.main()
